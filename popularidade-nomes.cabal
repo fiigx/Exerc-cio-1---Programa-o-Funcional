@@ -1,0 +1,46 @@
+cabal-version:      3.0
+name:               popularidade-nomes
+version:            0.1.0.0
+synopsis:           Consulta a popularidade de nomes a partir de arquivos de dados.
+description:        Uma atividade prática em Haskell para ler múltiplos arquivos,
+                    processar dados em memória e criar um laço de E/S recursivo
+                    para consultas interativas.
+license:            MIT
+license-file:       LICENSE
+author:             Prof. José Romildo Malaquias
+maintainer:         malaquias@ufop.edu.br
+category:           Console Application, Learning
+build-type:         Simple
+extra-source-files: 
+    README.md
+    boynames.txt
+    girlnames.txt
+
+common common-deps
+    build-depends:    base >= 4.7 && < 5
+    default-language: Haskell2010
+    ghc-options:      -Wall -Wcompat
+
+library
+    import:           common-deps
+    exposed-modules:  Popularidade
+    hs-source-dirs:   src
+
+executable popularidade-nomes
+    import:           common-deps
+    main-is:          Main.hs
+    hs-source-dirs:   app
+    build-depends:    popularidade-nomes
+
+test-suite tests
+    import:           common-deps
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          MainSpec.hs
+    other-modules:    Run
+    build-depends:
+        popularidade-nomes
+      , hspec
+      , directory
+      , temporary
+      , filepath

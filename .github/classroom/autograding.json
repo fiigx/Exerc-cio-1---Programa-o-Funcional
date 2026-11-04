@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "tabela — interpretação dos registros",
+      "setup": "",
+      "run": "LANG=C.UTF-8 cabal run popularidade-nomes:test:tests -- --no-color --match \"tabela: processamento de arquivo\"",
+      "input": "",
+      "output": "3 examples, 0 failures",
+      "comparison": "included",
+      "timeout": 180,
+      "points": 4
+    },
+    {
+      "name": "pesquisa — consulta de nomes",
+      "setup": "",
+      "run": "LANG=C.UTF-8 cabal run popularidade-nomes:test:tests -- --no-color --match \"pesquisa: consulta individual\"",
+      "input": "",
+      "output": "2 examples, 0 failures",
+      "comparison": "included",
+      "timeout": 180,
+      "points": 3
+    },
+    {
+      "name": "main — integração interativa",
+      "setup": "",
+      "run": "LANG=C.UTF-8 cabal run popularidade-nomes:test:tests -- --no-color --match \"main: interação completa\"",
+      "input": "",
+      "output": "1 example, 0 failures",
+      "comparison": "included",
+      "timeout": 180,
+      "points": 3
+    }
+  ]
+}
