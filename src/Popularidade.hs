@@ -1,28 +1,60 @@
 module Popularidade
-  ( tabela,
-    pesquisa,
-    go,
-    main,
+  ( tabela
+  , pesquisa
+  , go
+  , main
   )
 where
 
 import System.IO (BufferMode (NoBuffering), hSetBuffering, stdout)
 import Text.Printf (printf)
 
--- (Defina aqui os sinônimos de tipo, se desejar)
-
--- | Converte o conteúdo de um arquivo de nomes em uma tabela de dados.
 tabela :: String -> [(Int, String, Int)]
-tabela texto = undefined
+tabela texto = criarTabela 1 (lines texto)
+  where
+    criarTabela :: Int -> [String] -> [(Int, String, Int)]
+    criarTabela _ [] = []
+    criarTabela posicao (linha : restantes) =
+      case words linha of
+        [nome, quantidade] ->
+          (posicao, nome, read quantidade)
+            : criarTabela (posicao + 1) restantes
+        _ -> criarTabela (posicao + 1) restantes
 
--- | Pesquisa um nome em uma tabela e imprime o resultado.
 pesquisa :: String -> [(Int, String, Int)] -> String -> IO ()
-pesquisa tipo tabelaDeNomes nome = undefined
+pesquisa tipo tabelaDeNomes nome =
+  procurar tabelaDeNomes
+  where
+    procurar [] =
+      putStrLn (nome ++ " não encontrado entre " ++ tipo)
 
--- | Ação recursiva que implementa o laço de interação com o usuário.
+    procurar ((posicao, nomeTabela, quantidade) : restantes)
+      | nome == nomeTabela =
+          printf
+            "%s classificado na posição %d entre %s com %d registros\n"
+            nome posicao tipo quantidade
+      | otherwise = procurar restantes
+
 go :: [(Int, String, Int)] -> [(Int, String, Int)] -> IO ()
-go tabGarotos tabGarotas = undefined
+go tabGarotos tabGarotas = do
+  putStr "Nome: "
+  nome <- getLine
 
--- | Ação principal que orquestra o programa.
+  if null nome
+    then return ()
+    else do
+      pesquisa "garotas" tabGarotas nome
+      pesquisa "garotos" tabGarotos nome
+      go tabGarotos tabGarotas
+
 main :: IO ()
-main = undefined
+main = do
+  hSetBuffering stdout NoBuffering
+
+  boyNames <- readFile "boynames.txt"
+  girlNames <- readFile "girlnames.txt"
+
+  let tabGarotos = tabela boyNames
+      tabGarotas = tabela girlNames
+
+  go tabGarotos tabGarotas
